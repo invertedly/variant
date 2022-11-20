@@ -18,16 +18,43 @@
     <ClInclude Include="variant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="type_alternative_list.h">
+    <ClInclude Include="get_type_index.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="type_checker.h">
+    <ClInclude Include="get_largest_type_size.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
+    <ClInclude Include="out_of_list_exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="type_index_getter.h">
+    <ClInclude Include="variant_type_constraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="has_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="head_type_getter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="variant_alternative.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="variant_exception.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="type_operations_caller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="get.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="type_index_constraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="holds_alternative.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="destructor_exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

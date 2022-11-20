@@ -143,11 +143,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="type_checker.h" />
-    <ClInclude Include="type_alternative_list.h" />
-    <ClInclude Include="type_index_getter.h" />
+    <ClInclude Include="type_operations_caller.h" />
+    <ClInclude Include="destructor_exception.h" />
+    <ClInclude Include="get.h" />
+    <ClInclude Include="head_type_getter.h" />
+    <ClInclude Include="has_type.h" />
+    <ClInclude Include="get_largest_type_size.h" />
+    <ClInclude Include="holds_alternative.h" />
+    <ClInclude Include="out_of_list_exception.h" />
+    <ClInclude Include="get_type_index.h" />
+    <ClInclude Include="type_index_constraint.h" />
+    <ClInclude Include="variant_alternative.h" />
     <ClInclude Include="variant.h" />
+    <ClInclude Include="variant_exception.h" />
+    <ClInclude Include="variant_type_constraint.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
