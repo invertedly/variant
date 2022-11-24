@@ -21,31 +21,16 @@
     <ClInclude Include="get_type_index.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="get_largest_type_size.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="out_of_list_exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="variant_type_constraint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="has_type.h">
+    <ClInclude Include="bad_variant_access_exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="head_type_getter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="variant_alternative.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="variant_exception.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="type_operations_caller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="get.h">
+    <ClInclude Include="type_operation_caller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="type_index_constraint.h">
@@ -54,7 +39,13 @@
     <ClInclude Include="holds_alternative.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="destructor_exception.h">
+    <ClInclude Include="type_operation_caller_exception.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="variant_alternative.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="has_type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
