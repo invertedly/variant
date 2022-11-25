@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstddef>
-#include <functional>
 
 #include "destruct_type.h"
 #include "variant_alternative.h"
@@ -23,35 +22,31 @@ namespace custom_variant
 	public:
 
 		template <is_default_constructible_v T0 = variant_alternative_t<0, Types...>>
-		constexpr variant() noexcept (std::is_nothrow_default_constructible_v<T0>) :
-			memory_{}, type_index_{}
+		constexpr variant() noexcept (std::is_nothrow_default_constructible_v<T0>) : memory_{}, type_index_{}
 		{
 			new(memory_) T0();
 		}
 
 		template <variant_type_constraint T>
-		explicit constexpr variant(T&& t) noexcept (std::is_nothrow_constructible_v<T, T>)
-			requires (has_type_v<T, Types...> && !std::is_same_v<T, variant>) :
-			memory_{}, type_index_{ get_type_index<T, Types...>() }
+		requires has_type_v<T, Types...>
+		explicit constexpr variant(T&& t) noexcept (std::is_nothrow_constructible_v<T, T>) : memory_{}, type_index_{ get_type_index<T, Types...>() }
 		{
 			new(memory_) T(std::forward<T>(t));
 		}
 
-		constexpr variant(const variant& other) requires (!std::is_copy_constructible_v<Types...>) = delete;
-		//constexpr variant(const variant& other) requires (std::is_trivially_copy_constructible_v<Types...>) = default;
-		constexpr variant(const variant& other) :
-			memory_{}, type_index_{ get_type_index<decltype(other.template get<other.type_index_>()), Types...>() }
+		constexpr variant(const variant& other) requires (!(std::is_copy_constructible_v<Types> && ...)) = delete;
+
+		constexpr variant(const variant& other) : memory_{}, type_index_{other.type_index_}
 		{
-			if (type_index_ == variant_npos)
-			{
-				throw bad_variant_access("initialization with wrong type");
-			}
-
-			using type = decltype(other.template get<other.type_index_>());
-
-			new(memory_) type(other.template get<other.type_index_>());
+			copy_construct<Types...>(const_cast<std::byte*>(memory_), type_index_, const_cast<std::byte*>(other.memory_));
 		}
 
+		constexpr variant(variant&& other) requires (!(std::is_move_constructible_v<Types> && ...)) = delete;
+
+		constexpr variant(variant&& other) noexcept ((std::is_nothrow_move_constructible_v<Types> && ...)) : memory_{}, type_index_(other.type_index_)
+		{
+			move
+		}
 
 		template <size_t I>
 		requires type_index_contraint<I, Types...>

@@ -46,10 +46,43 @@ TEST(variant_default_ctor, has_not_default_constructible_type)
 	EXPECT_EQ(v.index(), 0);
 }
 
-TEST(variant_copy_ctor, default)
+TEST(variant_copy_ctor, trivially_copy_constructible)
 {
-	custom_variant::variant<int> v_old{};
-	custom_variant::variant<int> v_new(v_old);
+	{
+		custom_variant::variant<int> v_old{};
+		custom_variant::variant<int> v_new(v_old);
+	}
+
+	{
+		custom_variant::variant<int, double> v_old(1.1);
+		custom_variant::variant<int, double> v_new(v_old);
+	}
+}
+
+TEST(variant_copy_ctor, not_trivially_copy_constructible)
+{
+	class not_trivially_copyable
+	{
+	public:
+		not_trivially_copyable() = default;
+		not_trivially_copyable(const not_trivially_copyable&) {}
+	};
+
+	constexpr bool not_trivially_copy_constructible = !std::is_trivially_copy_constructible_v<not_trivially_copyable>;
+	EXPECT_TRUE(not_trivially_copy_constructible);
+
+	constexpr bool default_constructible = std::is_default_constructible_v<not_trivially_copyable>;
+	EXPECT_TRUE(default_constructible);
+
+	{
+		custom_variant::variant<not_trivially_copyable, std::string> v_old{};
+		custom_variant::variant<not_trivially_copyable, std::string> v_new(v_old);
+	}
+
+	{
+		custom_variant::variant<not_trivially_copyable, std::string> v_old{std::string{}};
+		custom_variant::variant<not_trivially_copyable, std::string> v_new(v_old);
+	}
 }
 
 TEST(variant_convert_ctor, default)
@@ -137,8 +170,7 @@ TEST(variant_get, valid_index)
 	{
 		custom_variant::variant<int, float> var(1);
 		EXPECT_EQ(var.index(), 0);
-		constexpr size_t index = var.index();
-		EXPECT_EQ(var.get<index>(), 1);
+		EXPECT_EQ(var.get<0>(), 1);
 	}
 
 	{
