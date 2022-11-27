@@ -143,19 +143,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="type_operations_caller.h" />
-    <ClInclude Include="destructor_exception.h" />
-    <ClInclude Include="get.h" />
-    <ClInclude Include="head_type_getter.h" />
     <ClInclude Include="has_type.h" />
-    <ClInclude Include="get_largest_type_size.h" />
+    <ClInclude Include="type_operation_caller.h" />
+    <ClInclude Include="type_operation_caller_exception.h" />
     <ClInclude Include="holds_alternative.h" />
     <ClInclude Include="out_of_list_exception.h" />
     <ClInclude Include="get_type_index.h" />
     <ClInclude Include="type_index_constraint.h" />
-    <ClInclude Include="variant_alternative.h" />
     <ClInclude Include="variant.h" />
-    <ClInclude Include="variant_exception.h" />
+    <ClInclude Include="get_variant_type.h" />
+    <ClInclude Include="bad_variant_access_exception.h" />
     <ClInclude Include="variant_type_constraint.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

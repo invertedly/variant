@@ -4,8 +4,10 @@
 
 namespace custom_variant
 {
-	template <variant_type_constraint HeadType,
-		variant_type_constraint ... OtherTypes>
+	template <
+		variant_type_constraint HeadType,
+		variant_type_constraint ... OtherTypes
+	>
 	struct head_type_getter final
 	{
 		using head_type = HeadType;

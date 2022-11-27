@@ -14,7 +14,7 @@ namespace custom_variant
 		variant_type_constraint CurType, 
 		variant_type_constraint ... NextTypes
 	>
-	requires type_index_contraint<I, CurType, NextTypes ... >
+requires type_index_contraint<I, CurType, NextTypes ... >
 	struct variant_alternative<I, variant<CurType, NextTypes ... > > final
 	{
 		using type = typename variant_alternative<I - 1, variant<NextTypes ...> >::type;
