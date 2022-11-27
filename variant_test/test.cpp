@@ -85,7 +85,7 @@ TEST(variant_copy_ctor, not_trivially_copy_constructible)
 	}
 }
 
-TEST(variant_convert_ctor, default)
+TEST(variant_convert_ctor, rvalue)
 {
 	{
 		custom_variant::variant<int, double> var(1);
@@ -97,6 +97,20 @@ TEST(variant_convert_ctor, default)
 		custom_variant::variant<int, double> var(1.1);
 		EXPECT_EQ(var.index(), 1);
 		EXPECT_EQ(var.get<1>(), 1.1);
+	}
+}
+
+TEST(variant_convert_ctor, lvalue)
+{
+	{
+		int a = 1;
+
+		static_assert(custom_variant::variant_type_constraint<decltype(a)>);
+		static_assert(custom_variant::_internal::has_type_v<decltype(a), int, double>);
+
+		//custom_variant::variant<int, double> var(a);
+		//EXPECT_EQ(var.index(), 0);
+		//EXPECT_EQ(var.get<0>(), 1);
 	}
 }
 
@@ -144,58 +158,58 @@ TEST(variant_swap, default)
 TEST(has_type_v, default)
 {
 	{
-		constexpr bool b = custom_variant::has_type_v<int, float, std::string, int>;
+		constexpr bool b = custom_variant::_internal::has_type_v<int, float, std::string, int>;
 		EXPECT_TRUE(b);
 	}
 
 	{
-		constexpr bool b = custom_variant::has_type_v<int, int, std::string, float>;
+		constexpr bool b = custom_variant::_internal::has_type_v<int, int, std::string, float>;
 		EXPECT_TRUE(b);
 	}
 
 	{
-		constexpr bool b = custom_variant::has_type_v<const int, float, std::string, int>;
+		constexpr bool b = custom_variant::_internal::has_type_v<const int, float, std::string, int>;
 		EXPECT_FALSE(b);
 	}
 
 	{
-		constexpr bool b = custom_variant::has_type_v<const int, float, const int, int>;
+		constexpr bool b = custom_variant::_internal::has_type_v<const int, float, const int, int>;
 		EXPECT_TRUE(b);
 	}
 }
 
 TEST(variant_alternative, single_type)
 {
-	constexpr bool cv_int_t = std::is_same_v<custom_variant::get_variant_type_t<0, const volatile int>, const volatile int>;
+	constexpr bool cv_int_t = std::is_same_v<custom_variant::_internal::get_type_t<0, const volatile int>, const volatile int>;
 	EXPECT_TRUE(cv_int_t);
 
 	class A {};
 
-	constexpr bool cv_user_class_t = std::is_same_v<custom_variant::get_variant_type_t<0, const volatile A>, const volatile A>;
+	constexpr bool cv_user_class_t = std::is_same_v<custom_variant::_internal::get_type_t<0, const volatile A>, const volatile A>;
 	EXPECT_TRUE(cv_user_class_t);
 }
 
 TEST(variant_alternative, several_types)
 {
-	constexpr bool cv_int_first = std::is_same_v<custom_variant::get_variant_type_t<0, const volatile int, int, int>, const volatile int>;
+	constexpr bool cv_int_first = std::is_same_v<custom_variant::_internal::get_type_t<0, const volatile int, int, int>, const volatile int>;
 	EXPECT_TRUE(cv_int_first);
 
-	constexpr bool cv_int_mid = std::is_same_v<custom_variant::get_variant_type_t<1, int, const volatile int, int>, const volatile int>;
+	constexpr bool cv_int_mid = std::is_same_v<custom_variant::_internal::get_type_t<1, int, const volatile int, int>, const volatile int>;
 	EXPECT_TRUE(cv_int_mid);
 
-	constexpr bool cv_int_end = std::is_same_v<custom_variant::get_variant_type_t<2, int, int, const volatile int>, const volatile int>;
+	constexpr bool cv_int_end = std::is_same_v<custom_variant::_internal::get_type_t<2, int, int, const volatile int>, const volatile int>;
 	EXPECT_TRUE(cv_int_end);
 }
 
 TEST(variant_alternative, several_types_repetitive)
 {
-	constexpr bool int_first = std::is_same_v<custom_variant::get_variant_type_t<0, int, int, int>, int>;
+	constexpr bool int_first = std::is_same_v<custom_variant::_internal::get_type_t<0, int, int, int>, int>;
 	EXPECT_TRUE(int_first);
 
-	constexpr bool int_mid = std::is_same_v<custom_variant::get_variant_type_t<1, int, int, int>, int>;
+	constexpr bool int_mid = std::is_same_v<custom_variant::_internal::get_type_t<1, int, int, int>, int>;
 	EXPECT_TRUE(int_mid);
 
-	constexpr bool int_last = std::is_same_v<custom_variant::get_variant_type_t<2, int, int, int>, int>;
+	constexpr bool int_last = std::is_same_v<custom_variant::_internal::get_type_t<2, int, int, int>, int>;
 	EXPECT_TRUE(int_last);
 }
 
@@ -234,22 +248,22 @@ TEST(get_type_index, valid_type)
 	using check_type = int;
 
 	{
-		constexpr size_t index = custom_variant::get_type_index<check_type, int, float, char>();
+		constexpr size_t index = custom_variant::_internal::get_type_index<check_type, int, float, char>();
 		EXPECT_EQ(index, 0);
 	}
 
 	{
-		constexpr size_t index = custom_variant::get_type_index<check_type, float, int, char>();
+		constexpr size_t index = custom_variant::_internal::get_type_index<check_type, float, int, char>();
 		EXPECT_EQ(index, 1);
 	}
 
 	{
-		constexpr size_t index = custom_variant::get_type_index<check_type, float, char, int>();
+		constexpr size_t index = custom_variant::_internal::get_type_index<check_type, float, char, int>();
 		EXPECT_EQ(index, 2);
 	}
 
 	{
-		constexpr size_t index = custom_variant::get_type_index<check_type, int>();
+		constexpr size_t index = custom_variant::_internal::get_type_index<check_type, int>();
 		EXPECT_EQ(index, 0);
 	}
 }
@@ -259,12 +273,12 @@ TEST(get_type_index, invalid_type)
 	using check_type = const int;
 
 	{
-		constexpr size_t index = custom_variant::get_type_index<check_type, int, float, char>();
+		constexpr size_t index = custom_variant::_internal::get_type_index<check_type, int, float, char>();
 		EXPECT_EQ(index, custom_variant::variant_npos);
 	}
 
 	{
-		constexpr size_t index = custom_variant::get_type_index<check_type, int>();
+		constexpr size_t index = custom_variant::_internal::get_type_index<check_type, int>();
 		EXPECT_EQ(index, custom_variant::variant_npos);
 	}
 }

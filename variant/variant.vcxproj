@@ -149,7 +149,7 @@
     <ClInclude Include="get_type_index.h" />
     <ClInclude Include="type_index_constraint.h" />
     <ClInclude Include="variant.h" />
-    <ClInclude Include="get_variant_type.h" />
+    <ClInclude Include="get_type.h" />
     <ClInclude Include="bad_variant_access_exception.h" />
     <ClInclude Include="variant_type_constraint.h" />
   </ItemGroup>
