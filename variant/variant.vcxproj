@@ -146,8 +146,6 @@
     <ClInclude Include="has_type.h" />
     <ClInclude Include="type_operation_caller.h" />
     <ClInclude Include="type_operation_caller_exception.h" />
-    <ClInclude Include="holds_alternative.h" />
-    <ClInclude Include="out_of_list_exception.h" />
     <ClInclude Include="get_type_index.h" />
     <ClInclude Include="type_index_constraint.h" />
     <ClInclude Include="variant.h" />

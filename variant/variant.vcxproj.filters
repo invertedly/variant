@@ -21,9 +21,6 @@
     <ClInclude Include="get_type_index.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="out_of_list_exception.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="variant_type_constraint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -34,9 +31,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="type_index_constraint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="holds_alternative.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="type_operation_caller_exception.h">
