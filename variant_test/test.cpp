@@ -88,7 +88,7 @@ TEST(variant_copy_ctor, not_trivially_copy_constructible)
 TEST(variant_convert_ctor, default)
 {
 	{
-		custom_variant::variant<int, float> var(1);
+		custom_variant::variant<int, double> var(1);
 		EXPECT_EQ(var.index(), 0);
 		EXPECT_EQ(var.get<0>(), 1);
 	}
@@ -98,13 +98,47 @@ TEST(variant_convert_ctor, default)
 		EXPECT_EQ(var.index(), 1);
 		EXPECT_EQ(var.get<1>(), 1.1);
 	}
+}
 
-	//{
-	//	int a = 1;
-	//	custom_variant::variant<int, double> var(a);
-	//	EXPECT_EQ(var.index(), 1);
-	//	EXPECT_EQ(var.get<1>(), 1.1);
-	//}
+TEST(variant_move_ctor, default)
+{
+	custom_variant::variant<int, std::string> v1(std::string{"abc"});
+	custom_variant::variant<int, std::string> v2(std::move(v1));
+	EXPECT_EQ(v2.get<1>(), "abc");
+	EXPECT_EQ(v1.get<1>(), std::string{});
+}
+
+TEST(variant_holds_alternative, default)
+{
+	custom_variant::variant<int, double, std::string> v{1.1};
+	EXPECT_EQ(v.holds_alternative<int>(), false);
+	EXPECT_EQ(v.holds_alternative<double>(), true);
+	EXPECT_EQ(v.holds_alternative<std::string>(), false);
+}
+
+TEST(variant_copy_assign, default)
+{
+	custom_variant::variant<int> v1{ 1 };
+	custom_variant::variant<int> v2 = v1;
+	EXPECT_EQ(v1.get<0>(), 1);
+	EXPECT_EQ(v2.get<0>(), 1);
+}
+
+TEST(variant_move_assign, default)
+{
+	custom_variant::variant<int> v1{ 1 };
+	custom_variant::variant<int> v2 = std::move(v1);
+	EXPECT_EQ(v1.get<0>(), 0);
+	EXPECT_EQ(v2.get<0>(), 1);
+}
+
+TEST(variant_swap, default)
+{
+	custom_variant::variant<int> v1{ 1 };
+	custom_variant::variant<int> v2{ 2 };
+	v1.swap(v2);
+	EXPECT_EQ(v1.get<0>(), 2);
+	EXPECT_EQ(v2.get<0>(), 1);
 }
 
 TEST(has_type_v, default)
@@ -132,36 +166,36 @@ TEST(has_type_v, default)
 
 TEST(variant_alternative, single_type)
 {
-	constexpr bool cv_int_t = std::is_same_v<custom_variant::variant_alternative_t<0, const volatile int>, const volatile int>;
+	constexpr bool cv_int_t = std::is_same_v<custom_variant::get_variant_type_t<0, const volatile int>, const volatile int>;
 	EXPECT_TRUE(cv_int_t);
 
 	class A {};
 
-	constexpr bool cv_user_class_t = std::is_same_v<custom_variant::variant_alternative_t<0, const volatile A>, const volatile A>;
+	constexpr bool cv_user_class_t = std::is_same_v<custom_variant::get_variant_type_t<0, const volatile A>, const volatile A>;
 	EXPECT_TRUE(cv_user_class_t);
 }
 
 TEST(variant_alternative, several_types)
 {
-	constexpr bool cv_int_first = std::is_same_v<custom_variant::variant_alternative_t<0, const volatile int, int, int>, const volatile int>;
+	constexpr bool cv_int_first = std::is_same_v<custom_variant::get_variant_type_t<0, const volatile int, int, int>, const volatile int>;
 	EXPECT_TRUE(cv_int_first);
 
-	constexpr bool cv_int_mid = std::is_same_v<custom_variant::variant_alternative_t<1, int, const volatile int, int>, const volatile int>;
+	constexpr bool cv_int_mid = std::is_same_v<custom_variant::get_variant_type_t<1, int, const volatile int, int>, const volatile int>;
 	EXPECT_TRUE(cv_int_mid);
 
-	constexpr bool cv_int_end = std::is_same_v<custom_variant::variant_alternative_t<2, int, int, const volatile int>, const volatile int>;
+	constexpr bool cv_int_end = std::is_same_v<custom_variant::get_variant_type_t<2, int, int, const volatile int>, const volatile int>;
 	EXPECT_TRUE(cv_int_end);
 }
 
 TEST(variant_alternative, several_types_repetitive)
 {
-	constexpr bool int_first = std::is_same_v<custom_variant::variant_alternative_t<0, int, int, int>, int>;
+	constexpr bool int_first = std::is_same_v<custom_variant::get_variant_type_t<0, int, int, int>, int>;
 	EXPECT_TRUE(int_first);
 
-	constexpr bool int_mid = std::is_same_v<custom_variant::variant_alternative_t<1, int, int, int>, int>;
+	constexpr bool int_mid = std::is_same_v<custom_variant::get_variant_type_t<1, int, int, int>, int>;
 	EXPECT_TRUE(int_mid);
 
-	constexpr bool int_last = std::is_same_v<custom_variant::variant_alternative_t<2, int, int, int>, int>;
+	constexpr bool int_last = std::is_same_v<custom_variant::get_variant_type_t<2, int, int, int>, int>;
 	EXPECT_TRUE(int_last);
 }
 

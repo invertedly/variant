@@ -3,7 +3,7 @@
 #include <string>
 #include <exception>
 
-namespace custom_variant
+namespace _internal_custom_variant
 {
 	class type_operation_caller_exception final : public std::exception
 	{

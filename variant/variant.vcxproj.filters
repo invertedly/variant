@@ -42,7 +42,7 @@
     <ClInclude Include="type_operation_caller_exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="variant_alternative.h">
+    <ClInclude Include="get_variant_type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="has_type.h">
