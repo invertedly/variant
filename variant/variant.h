@@ -22,16 +22,22 @@ namespace custom_variant
 	public:
 
 		template <is_default_constructible_v T0 = _internal::get_type_t<0, Types...>>
-		constexpr variant() noexcept (std::is_nothrow_default_constructible_v<T0>) : memory_{}, type_index_{}
+		explicit constexpr variant() noexcept (std::is_nothrow_default_constructible_v<T0>) : memory_{}, type_index_{}
 		{
 			new(memory_) T0();
 		}
 
-		template <variant_type_constraint T>
-		requires (_internal::has_type_v<T, Types...> && !std::is_same_v<T, variant>)
-		explicit constexpr variant(T&& t) noexcept (std::is_nothrow_constructible_v<T, T>) : memory_{}, type_index_{ _internal::get_type_index<T, Types...>() }
+		template <typename T, typename RemoveReferenceT = std::remove_reference_t<T>>
+		requires (
+			_internal::has_type_v<RemoveReferenceT, Types...> && 
+			!std::is_same_v<RemoveReferenceT, variant> && 
+			variant_type_constraint<RemoveReferenceT>
+		)
+		explicit constexpr variant(T&& t) noexcept (std::is_nothrow_constructible_v<RemoveReferenceT, decltype(std::forward<T>(t))>)
+			: memory_{},
+			  type_index_{ _internal::get_type_index<RemoveReferenceT, Types...>() }
 		{
-			new(memory_) T(std::forward<T>(t));
+			new(memory_) RemoveReferenceT(std::forward<T>(t));
 		}
 
 		constexpr variant(const variant& other) requires (!(std::is_copy_constructible_v<Types> && ...)) = delete;

@@ -108,9 +108,9 @@ TEST(variant_convert_ctor, lvalue)
 		static_assert(custom_variant::variant_type_constraint<decltype(a)>);
 		static_assert(custom_variant::_internal::has_type_v<decltype(a), int, double>);
 
-		//custom_variant::variant<int, double> var(a);
-		//EXPECT_EQ(var.index(), 0);
-		//EXPECT_EQ(var.get<0>(), 1);
+		custom_variant::variant<int, double> var{a};
+		EXPECT_EQ(var.index(), 0);
+		EXPECT_EQ(var.get<0>(), 1);
 	}
 }
 
